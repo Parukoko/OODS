@@ -67,28 +67,14 @@ def process_explosion(items):
 
 
 def color_crush(n, m):
-    print("Initial Input:")
-    print("Normal:", n)
-    print("Mirror:", m)
-
-    # Process Mirror
     m_items = list(reversed(m))
     m_stack, m_explosion, m_items = process_explosion(m_items)
     interference_items = []
-    print("Processed Mirror:", ''.join(m_stack.items))
     while not m_stack.isEmpty():
         interference_items.append(m_stack.pop())
-
-
-    print("Remaining Items in Mirror Stack:", ''.join(m_stack.items))
-    print("Interference Items:", interference_items)
-
     m_item = Queue()
     for item in m_items:
         m_item.enqueue(item)
-
-
-    # Process Normal
     n_queue = Queue()
     for char in n:
         n_queue.enqueue(char)
