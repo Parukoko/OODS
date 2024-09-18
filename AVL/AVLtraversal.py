@@ -70,7 +70,7 @@ class AVLTree:
     def postOrder(self):
          print("AVLTree post-order : ",end='')
          self._postOrder(self.root)
-         print()\
+         print()
 
     def _postOrder(self, node):
         if node:
