@@ -31,20 +31,19 @@ class HashMap:
 		old_bucket = self.bucket
 		self.bucket = [None] * self.size
 		self.capacity = 0
-		for element in old_bucket:
+		for element in reversed(old_bucket):
 			if element is not None:
 				self.set_value(element, rehashed=True)
 	def add_value(self, element, rehashed=False):
 		print(f"Add : {element}")
 		self.set_value(element, rehashed=False)
 	def set_value(self, element, rehashed=False):
-		if (self.capacity + 1) / self.size > self.threshold:
+		if (self.capacity + 1) / self.size > self.threshold and not rehashed:
 			print("****** Data over threshold - Rehash !!! ******")
 			self.rehash()
-		index = self.get_index(element)
+		hashed_key = self.get_index(element)
+		index = hashed_key
 		i = 0
-		# if not rehashed:
-		# 	print(f"Add : {element}")
 		while i < self.maxCollisions:
 			if self.bucket[index] is None:
 				self.bucket[index] = element
@@ -53,30 +52,13 @@ class HashMap:
 			else:
 				print(f'collision number {i+1} at {index}')
 				i += 1
-				index = (index + pow(i,2)) % self.size
-		self.rehash()
-		print('****** Max collision - Rehash !!! ******')
-		self.set_value(element, rehashed=True)
+				index = (hashed_key + pow(i,2)) % self.size
+			if i == self.maxCollisions:
+				print('****** Max collision - Rehash !!! ******')
+				self.rehash()
+				self.set_value(element, rehashed=True)
+				return
 
-	# def hashing_quadratic_probe(self, key, value):
-	# 	hashed_key = self.get_index(key)
-	# 	index = hashed_key
-	# 	if self.is_full():
-	# 		print('This table is full !!!!!!')
-	# 		return
-	# 	i = 0
-	# 	while i < self.maxCollisions:
-	# 		if self.bucket[hashed_key] is None:
-	# 			self.bucket[hashed_key] = Data(key, value)
-	# 			return
-	# 		else:
-	# 			print(f'collision number {i+1} at {index}')
-	# 			i += 1
-	# 			index = (hashed_key + pow(i,2)) % self.size
-	# 			if self.bucket[index] is None:
-	# 				self.bucket[index] = Data(key, value)
-	# 				return
-	# 	print('Max of collisionChain')
 	def __str__(self) -> str:
 		result = ''
 		for i in range(self.size):
